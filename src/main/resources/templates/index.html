@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Title</title>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    function loginAction() {
+
+        // 获取用户输入的账号和密码
+        var name = $('#count').val();
+        var password = $('#password').val();
+
+        $.ajax({
+            url : '/get',
+            type : 'post',
+            // data对象中的属性名要和服务端控制器的参数名一致 login(name, password)
+            data : {
+                'name' : name,
+                'password' : password
+            },
+            dataType : 'json',
+            success : function(result)
+            {
+                if (result.state == 0)
+                {
+                    // 登录成功，设置cookie并跳转edit.html
+                    addCookie('userId', result.data.id);
+                    addCookie('nick', result.data.nick);
+                    location.href = 'edit.html';
+                }
+                else
+                {
+                    // 登录失败
+                    var msg = result.message;
+                    $('#sig_in').next().html(msg);
+                    $('#sig_in').next().css("color", "red");
+                }
+            },
+            error : function(e) {
+                alert("系统异常");
+            }
+        });
+        //$('#password').val("");
+    }
+</script>
+</head>
+<body>
+<input type="text" id="count">
+
+<br><br>
+<input type="text" id="password">
+
+<input type="button" value="login" onclick="loginAction()">
+<p id = "00"></p>
+
+</body>
+</html>
