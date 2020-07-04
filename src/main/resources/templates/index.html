@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <meta charset="UTF-8">
 <title>Title</title>
 
@@ -8,51 +8,44 @@
     function loginAction() {
 
         // 获取用户输入的账号和密码
-        var name = $('#count').val();
-        var password = $('#password').val();
+        var msg = $('#msg').val();
+        //var password = $('#password').val();
 
         $.ajax({
             url : '/get',
             type : 'post',
             // data对象中的属性名要和服务端控制器的参数名一致 login(name, password)
             data : {
-                'name' : name,
-                'password' : password
+                'msg' : msg,
+                //'password' : password
             },
             dataType : 'json',
-            success : function(result)
+            success : function(data)
             {
-                if (result.state == 0)
+                //var object = data.parseJSON();
+                for (var i in data)
                 {
-                    // 登录成功，设置cookie并跳转edit.html
-                    addCookie('userId', result.data.id);
-                    addCookie('nick', result.data.nick);
-                    location.href = 'edit.html';
+                    alert(data[i]);
+                    
                 }
-                else
-                {
-                    // 登录失败
-                    var msg = result.message;
-                    $('#sig_in').next().html(msg);
-                    $('#sig_in').next().css("color", "red");
-                }
+
             },
             error : function(e) {
                 alert("系统异常");
             }
         });
-        //$('#password').val("");
+        //$('#password').val("");   //置空
+
     }
 </script>
 </head>
+
 <body>
-<input type="text" id="count">
-
-<br><br>
-<input type="text" id="password">
-
-<input type="button" value="login" onclick="loginAction()">
-<p id = "00"></p>
+<input type="text" id="msg">
+&emsp;  <!--tab键-->
+<input type="button" value="Search" onclick="loginAction()">
+<h1 id="00">
+<span th:text="${data}"></span>
 
 </body>
 </html>
